@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.example</groupId>
-    <artifactId>MovieDatabase</artifactId>
+    <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>MovieDatabase</name>
+    <name>backend</name>
     <description>backend</description>
     <url/>
     <licenses>
