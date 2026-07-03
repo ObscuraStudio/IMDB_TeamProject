@@ -6,7 +6,7 @@ import MovieById from "./components/MovieById.tsx";
 import MoviePlotByName from "./components/MoviePlotByName.tsx";
 
 function App() {
-    
+
 
     return (
         <>
