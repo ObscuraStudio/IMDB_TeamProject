@@ -1,6 +1,7 @@
 import {useState} from "react";
 import axios from "axios";
 import {baseURI, MIN_LENGTH_MOVIE_TITLE, type OmdbMovieResponse} from "../types/Movie.ts";
+import MovieDetails from "./MovieDetails.tsx";
 
 export default function MovieByName() {
     const placeholder:string = "Enter movie name";
@@ -13,7 +14,8 @@ export default function MovieByName() {
         const queryURI:string = baseURI + "/title/" + movieName ;
         axios.get(queryURI)
             .then((response) =>
-                (setMovie(response.data)))
+            {setMovie(response.data);
+            setIsMovieValid(true);})
             .catch(()=>setIsMovieValid(false));
     }
 
@@ -21,6 +23,7 @@ export default function MovieByName() {
         <>
             <form onSubmit={submitMovieName}>
                 <label> Movie name </label>
+                <br/>
                 <input onChange=
                            {(e) =>
                                setMovieName(e.target.value)
@@ -31,11 +34,12 @@ export default function MovieByName() {
                        required
                        minLength={MIN_LENGTH_MOVIE_TITLE}
                        placeholder={placeholder}/>
+                <br/>
                 <button type={"submit"}> Submit </button>
             </form>
             <div>
                 {isMovieValid ?
-                    <p>Movie details: {movie.Title} Year of release: {movie.Year}</p> :
+                    <MovieDetails {...movie}/> :
                     <p>Movie not found</p>
                 }
             </div>
