@@ -1,7 +1,9 @@
 package org.example.backend.service;
 
 import org.example.backend.dto.OmdbMovieResponse;
+import org.example.backend.entities.UserData;
 import org.example.backend.exception.MovieNotFoundException;
+import org.example.backend.repository.UserDataRepository;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -9,10 +11,13 @@ import org.springframework.web.client.RestClient;
 @Service
 public class OmdbService {
 
+    private final UserDataRepository userDataRepository;
+
     private final RestClient omdbRestClient;
 
-    public OmdbService(RestClient omdbRestClient) {
+    public OmdbService(RestClient omdbRestClient, UserDataRepository userDataRepository) {
         this.omdbRestClient = omdbRestClient;
+        this.userDataRepository = userDataRepository;
     }
 
     // get a movie by its IMDb id, e.g. tt1375666
@@ -66,4 +71,34 @@ public class OmdbService {
         }
         return movie;
     }
+
+    // CRUD Repository
+    public UserData getUserData(String username) {
+        if(userDataRepository.existsByUserName(username)){
+            return userDataRepository.getUserDataByUserName(username);
+        }
+        return null;
+    }
+
+    public UserData saveUserData(UserData userData) {
+        if(userDataRepository.existsByUserName(userData.userName())){
+            return null;
+        }
+        else{
+            return userDataRepository.save(userData);
+        }
+    }
+
+    public UserData updateUserData(UserData userData) {
+        UserData uD = userDataRepository.getUserDataByUserName(userData.userName());
+        UserData updatedUD = uD.withOmdbItemList(userData.omdbItemList());
+        return userDataRepository.save(updatedUD);
+    }
+
+    public void deleteUserData(UserData userData) {
+        if(userDataRepository.existsByUserName(userData.userName())){
+            userDataRepository.delete(userData);
+        }
+    }
+
 }

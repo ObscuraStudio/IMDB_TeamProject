@@ -2,6 +2,7 @@ package org.example.backend.service;
 
 import org.example.backend.dto.OmdbMovieResponse;
 import org.example.backend.exception.MovieNotFoundException;
+import org.example.backend.repository.UserDataRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
@@ -12,6 +13,7 @@ import org.springframework.web.client.RestClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.queryParam;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
@@ -55,13 +57,14 @@ class OmdbServiceTest {
 
     private OmdbService omdbService;
     private MockRestServiceServer mockServer;
+    private UserDataRepository mockUserDataRepository = mock(UserDataRepository.class);
 
     @BeforeEach
     void setUp() {
         RestClient.Builder builder = RestClient.builder().baseUrl(BASE_URL);
         mockServer = MockRestServiceServer.bindTo(builder).build();
         RestClient omdbRestClient = builder.build();
-        omdbService = new OmdbService(omdbRestClient);
+        omdbService = new OmdbService(omdbRestClient, mockUserDataRepository);
     }
 
     // ---------- getMovieById ----------
