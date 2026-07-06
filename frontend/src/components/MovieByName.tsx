@@ -1,10 +1,10 @@
 import {useState} from "react";
 import axios from "axios";
-import type {OmdbMovieResponse} from "../types/OmdbMovie.ts";
+import {baseURI, type OmdbMovieResponse} from "../types/Movie.ts";
 
 export default function MovieByName() {
-    const baseURI:string = "/api/movies";
-    const [movieName, setMovieName] = useState<string>("movie123");
+    const placeholder:string = "Enter movie name";
+    const [movieName, setMovieName] = useState<string>(placeholder);
     const [movie, setMovie] = useState<OmdbMovieResponse>({Title: "", Year:""});
     const [isMovieValid, setIsMovieValid] = useState<boolean>(true);
 
@@ -30,7 +30,7 @@ export default function MovieByName() {
                     name="Movie name"
                     required
                     minLength={4}
-                    placeholder={"Enter movie name"}/>
+                    placeholder={placeholder}/>
                 <button type={"submit"}> Submit </button>
             </form>
             <div>

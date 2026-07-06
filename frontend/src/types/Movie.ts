@@ -28,3 +28,5 @@ export interface Rating {
     Source?: string;
     Value?: string;
 }
+
+export const baseURI:string = "/api/movies";
