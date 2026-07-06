@@ -1,6 +1,6 @@
 import {useState} from "react";
 import axios from "axios";
-import {baseURI, type OmdbMovieResponse} from "../types/Movie.ts";
+import {baseURI, MIN_LENGTH_MOVIE_TITLE, type OmdbMovieResponse} from "../types/Movie.ts";
 
 export default function MovieByName() {
     const placeholder:string = "Enter movie name";
@@ -20,17 +20,17 @@ export default function MovieByName() {
     return (
         <>
             <form onSubmit={submitMovieName}>
-                <label>Movie name (minimum 5 characters) </label>
+                <label> Movie name </label>
                 <input onChange=
                            {(e) =>
                                setMovieName(e.target.value)
                            }
-                    type="text"
-                    id="Movie name"
-                    name="Movie name"
-                    required
-                    minLength={4}
-                    placeholder={placeholder}/>
+                       type="text"
+                       id="Movie name"
+                       name="Movie name"
+                       required
+                       minLength={MIN_LENGTH_MOVIE_TITLE}
+                       placeholder={placeholder}/>
                 <button type={"submit"}> Submit </button>
             </form>
             <div>

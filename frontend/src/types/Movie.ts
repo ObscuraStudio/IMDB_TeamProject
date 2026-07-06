@@ -30,3 +30,4 @@ export interface Rating {
 }
 
 export const baseURI:string = "/api/movies";
+export const MIN_LENGTH_MOVIE_TITLE:number = 5;
