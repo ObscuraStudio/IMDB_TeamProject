@@ -4,19 +4,20 @@ import {baseURI, MIN_LENGTH_MOVIE_TITLE, type OmdbMovieResponse} from "../types/
 import MovieDetails from "./MovieDetails.tsx";
 
 export default function MovieByName() {
-    const placeholder:string = "Enter movie name";
+    const placeholder: string = "Enter movie name";
     const [movieName, setMovieName] = useState<string>(placeholder);
-    const [movie, setMovie] = useState<OmdbMovieResponse>({Title: "", Year:""});
+    const [movie, setMovie] = useState<OmdbMovieResponse>({Title: "", Year: ""});
     const [isMovieValid, setIsMovieValid] = useState<boolean>(true);
 
-    function submitMovieName(event:React.SubmitEvent){
+    function submitMovieName(event: React.SubmitEvent) {
         event.preventDefault();
-        const queryURI:string = baseURI + "/title/" + movieName ;
+        const queryURI: string = baseURI + "/title/" + movieName;
         axios.get(queryURI)
-            .then((response) =>
-            {setMovie(response.data);
-            setIsMovieValid(true);})
-            .catch(()=>setIsMovieValid(false));
+            .then((response) => {
+                setMovie(response.data);
+                setIsMovieValid(true);
+            })
+            .catch(() => setIsMovieValid(false));
     }
 
     return (
@@ -35,7 +36,7 @@ export default function MovieByName() {
                        minLength={MIN_LENGTH_MOVIE_TITLE}
                        placeholder={placeholder}/>
                 <br/>
-                <button type={"submit"}> Submit </button>
+                <button type={"submit"}> Submit</button>
             </form>
             <div>
                 {isMovieValid ?
