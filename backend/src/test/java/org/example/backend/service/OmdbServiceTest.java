@@ -58,13 +58,14 @@ class OmdbServiceTest {
     private OmdbService omdbService;
     private MockRestServiceServer mockServer;
     private UserDataRepository mockUserDataRepository = mock(UserDataRepository.class);
+    private IdService mockIdService = mock(IdService.class);
 
     @BeforeEach
     void setUp() {
         RestClient.Builder builder = RestClient.builder().baseUrl(BASE_URL);
         mockServer = MockRestServiceServer.bindTo(builder).build();
         RestClient omdbRestClient = builder.build();
-        omdbService = new OmdbService(omdbRestClient, mockUserDataRepository);
+        omdbService = new OmdbService(omdbRestClient, mockUserDataRepository, mockIdService);
     }
 
     // ---------- getMovieById ----------
