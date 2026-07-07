@@ -1,9 +1,16 @@
-import {useState} from "react";
+import {type JSX, useEffect, useState} from "react";
 import axios from "axios";
 import {baseURI, MIN_LENGTH_MOVIE_TITLE, type OmdbMovieResponse} from "../types/Movie.ts";
 import MovieDetails from "./MovieDetails.tsx";
 
 export default function MovieByName() {
+    // This hook helps with conditional rendering
+    const [isSubmitButtonClicked, setIsSubmitButtonClicked] = useState<boolean>(false);
+    // Hook is reset when navigating from another page
+    useEffect(() => {
+        setIsSubmitButtonClicked(false);
+    }, []);
+
     const placeholder: string = "Enter movie name";
     const [movieName, setMovieName] = useState<string>(placeholder);
     const [movie, setMovie] = useState<OmdbMovieResponse>({Title: "", Year: ""});
@@ -11,6 +18,7 @@ export default function MovieByName() {
 
     function submitMovieName(event: React.SubmitEvent) {
         event.preventDefault();
+        setIsSubmitButtonClicked(true);
         const queryURI: string = baseURI + "/title/" + movieName;
         axios.get(queryURI)
             .then((response) => {
@@ -18,6 +26,18 @@ export default function MovieByName() {
                 setIsMovieValid(true);
             })
             .catch(() => setIsMovieValid(false));
+    }
+
+
+    const renderResultContent = ():JSX.Element => {
+        return (
+            <div>
+                {isMovieValid ?
+                    <MovieDetails {...movie}/> :
+                    <p>Movie with given name not found</p>
+                }
+            </div>
+        )
     }
 
     return (
@@ -38,12 +58,7 @@ export default function MovieByName() {
                 <br/>
                 <button type={"submit"}> Submit</button>
             </form>
-            <div>
-                {isMovieValid ?
-                    <MovieDetails {...movie}/> :
-                    <p>Movie with given name not found</p>
-                }
-            </div>
+            {isSubmitButtonClicked && renderResultContent()}
         </>
     )
 }
