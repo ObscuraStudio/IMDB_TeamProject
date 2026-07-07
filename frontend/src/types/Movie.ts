@@ -32,3 +32,4 @@ export interface Rating {
 export const baseURI: string = "/api/movies";
 export const MIN_LENGTH_MOVIE_TITLE: number = 5;
 export const MIN_LENGTH_MOVIE_ID: number = 7;
+export const SAFE_PATH_SEGMENT:RegExp = /^[a-zA-Z0-9\s'’:,.\-()]+$/;

@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {baseURI, type OmdbMovieResponse} from "../types/Movie.ts";
+import {baseURI, type OmdbMovieResponse, SAFE_PATH_SEGMENT} from "../types/Movie.ts";
 import axios from "axios";
 
 export function useMovieFetch() {
@@ -11,7 +11,14 @@ export function useMovieFetch() {
 
     function submit(queryURI: string, pathSegment:string) {
         setIsSubmitButtonClicked(true);
+
+        if(!SAFE_PATH_SEGMENT.test(pathSegment)){
+            setIsMovieValid(false);
+            return;
+        }
+
         const validatedURI:string = baseURI + queryURI + encodeURIComponent(pathSegment);
+
         axios.get(validatedURI)
             .then((response) => {
                 setMovie(response.data);
