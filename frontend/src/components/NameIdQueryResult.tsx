@@ -9,11 +9,11 @@ type NameIdQueryResultProps = {
 export default function NameIdQueryResult(props: Readonly<NameIdQueryResultProps>) {
 
     return (
-        <div>
+        <>
             {props.isMovieValid ?
                 <MovieDetails {...props.movie}/> :
                 <p>Movie with given name not found</p>
             }
-        </div>
+        </>
     )
 }
