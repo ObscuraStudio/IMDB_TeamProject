@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/movies")
+@RequestMapping("/api/login")
 public class MovieController {
 
     private final OmdbService omdbService;
@@ -18,19 +18,19 @@ public class MovieController {
     }
 
     // GET a movie by its IMDb id, e.g. /api/movies/tt1375666
-    @GetMapping("/{imdbId}")
+    @GetMapping("/movies/{imdbId}")
     public OmdbMovieResponse getMovieById(@PathVariable String imdbId) {
         return omdbService.getMovieById(imdbId);
     }
 
     // GET a movie by its title, e.g. /api/movies/title/Inception
-    @GetMapping("/title/{title}")
+    @GetMapping("/movies/title/{title}")
     public OmdbMovieResponse getMovieByName(@PathVariable String title) {
         return omdbService.getMovieByName(title);
     }
 
     // GET a movie by its title with the full plot, e.g. /api/movies/plot/Inception
-    @GetMapping("/plot/{title}")
+    @GetMapping("/movies/plot/{title}")
     public OmdbMovieResponse getMoviePlotByName(@PathVariable String title) {
         return omdbService.getMoviePlotByName(title);
     }
