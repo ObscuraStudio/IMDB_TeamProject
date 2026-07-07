@@ -15,7 +15,7 @@ export default function Plotdetails(movie: Readonly<OmdbMovieResponse>) {
                             <table className="interface-table">
                                 <tbody>
                                 <tr key="Plot" className="interface-row">
-                                    <td className="interface-label">Plot</td>
+                                    <th className="row-header">Plot</th>
                                     <td className="interface-value">{movie.Plot}</td>
                                 </tr>
                                 </tbody>
