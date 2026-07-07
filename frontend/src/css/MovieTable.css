@@ -17,3 +17,8 @@
 .interface-value {
     padding: 8px;
 }
+
+h1 {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    line-height: 1.2;
+}

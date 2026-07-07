@@ -1,14 +1,15 @@
 import type {OmdbMovieResponse} from "../types/Movie.ts";
+import "../css/MovieTable.css"
 
 export default function Plotdetails(movie: Readonly<OmdbMovieResponse>) {
     return (
         <>
             <div>
                 <article>
+                    <h1>
+                        {movie.Title}
+                    </h1>
                     <header>
-                        <h1>
-                            {movie.Title}
-                        </h1>
                     </header>
                     <main>
                         <section id={"movie details"}>
