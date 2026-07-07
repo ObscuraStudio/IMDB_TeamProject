@@ -12,7 +12,7 @@ export default function MovieById() {
 
     function submitMovieId(event: React.SubmitEvent) {
         event.preventDefault();
-        const queryURI: string = baseURI + "/" + movieId;
+        const queryURI: string = baseURI + "/" + encodeURIComponent(movieId);
         submit(queryURI);
     }
 

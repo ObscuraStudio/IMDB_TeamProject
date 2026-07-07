@@ -12,7 +12,7 @@ export default function MovieByName() {
 
     function submitMovieName(event: React.SubmitEvent) {
         event.preventDefault();
-        const queryURI: string = baseURI + "/title/" + movieName;
+        const queryURI: string = baseURI + "/title/" + encodeURIComponent(movieName);
         submit(queryURI);
     }
 
