@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {type OmdbMovieResponse} from "../types/Movie.ts";
+import {baseURI, type OmdbMovieResponse} from "../types/Movie.ts";
 import axios from "axios";
 
 export function useMovieFetch() {
@@ -9,9 +9,10 @@ export function useMovieFetch() {
     const [movie, setMovie] = useState<OmdbMovieResponse>({Title: "", Year: ""});
     const [isMovieValid, setIsMovieValid] = useState<boolean>(true);
 
-    function submit(queryURI: string) {
+    function submit(queryURI: string, pathSegment:string) {
         setIsSubmitButtonClicked(true);
-        axios.get(queryURI)
+        const validatedURI:string = baseURI + queryURI + encodeURIComponent(pathSegment);
+        axios.get(validatedURI)
             .then((response) => {
                 setMovie(response.data);
                 setIsMovieValid(true);

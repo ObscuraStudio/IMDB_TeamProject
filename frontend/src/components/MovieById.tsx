@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {baseURI, MIN_LENGTH_MOVIE_ID} from "../types/Movie.ts";
+import {MIN_LENGTH_MOVIE_ID} from "../types/Movie.ts";
 import {useMovieFetch} from "../hooks/useMovieFetch.ts";
 import NameIdQueryResult from "./NameIdQueryResult.tsx";
 
@@ -12,8 +12,9 @@ export default function MovieById() {
 
     function submitMovieId(event: React.SubmitEvent) {
         event.preventDefault();
-        const queryURI: string = baseURI + "/" + encodeURIComponent(movieId);
-        submit(queryURI);
+        const queryURI: string = "/";
+        const pathSegment:string = movieId;
+        submit(queryURI, pathSegment);
     }
 
     return (

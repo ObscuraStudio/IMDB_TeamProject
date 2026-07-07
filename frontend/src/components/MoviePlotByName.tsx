@@ -1,6 +1,6 @@
 import {type JSX, useState} from "react";
 import {useMovieFetch} from "../hooks/useMovieFetch.ts";
-import {baseURI, MIN_LENGTH_MOVIE_TITLE} from "../types/Movie.ts";
+import {MIN_LENGTH_MOVIE_TITLE} from "../types/Movie.ts";
 import Plotdetails from "./Plotdetails.tsx";
 
 export default function MoviePlotByName() {
@@ -12,8 +12,9 @@ export default function MoviePlotByName() {
 
     function submitMovieName(event: React.SubmitEvent) {
         event.preventDefault();
-        const queryURI: string = baseURI + "/title/" + encodeURIComponent(movieName);
-        submit(queryURI);
+        const queryURI: string = "/title/";
+        const pathSegment:string = movieName;
+        submit(queryURI, pathSegment);
     }
 
     const returnPlotDetails = (): JSX.Element => {
