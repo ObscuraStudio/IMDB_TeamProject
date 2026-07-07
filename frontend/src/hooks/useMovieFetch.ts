@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {type OmdbMovieResponse} from "../types/Movie.ts";
 import axios from "axios";
 
@@ -8,11 +8,6 @@ export function useMovieFetch() {
 
     const [movie, setMovie] = useState<OmdbMovieResponse>({Title: "", Year: ""});
     const [isMovieValid, setIsMovieValid] = useState<boolean>(true);
-
-    // Hook is reset when navigating from another page
-    useEffect(() => {
-        setIsSubmitButtonClicked(false);
-    }, []);
 
     function submit(queryURI: string) {
         setIsSubmitButtonClicked(true);
