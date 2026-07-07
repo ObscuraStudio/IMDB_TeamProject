@@ -1,7 +1,7 @@
-import {type JSX, useState} from "react";
+import {useState} from "react";
 import {useMovieFetch} from "../hooks/useMovieFetch.ts"
 import {baseURI, MIN_LENGTH_MOVIE_TITLE} from "../types/Movie.ts";
-import MovieDetails from "./MovieDetails.tsx";
+import NameIdQueryResult from "./NameIdQueryResult.tsx";
 
 export default function MovieByName() {
 
@@ -14,17 +14,6 @@ export default function MovieByName() {
         event.preventDefault();
         const queryURI: string = baseURI + "/title/" + movieName;
         submit(queryURI);
-    }
-
-    const renderResultContent = ():JSX.Element => {
-        return (
-            <div>
-                {isMovieValid ?
-                    <MovieDetails {...movie}/> :
-                    <p>Movie with given name not found</p>
-                }
-            </div>
-        )
     }
 
     return (
@@ -45,7 +34,8 @@ export default function MovieByName() {
                 <br/>
                 <button type={"submit"}> Submit</button>
             </form>
-            {isSubmitButtonClicked && renderResultContent()}
+            {isSubmitButtonClicked &&
+                <NameIdQueryResult isMovieValid={isMovieValid} movie={movie}></NameIdQueryResult>}
         </>
     )
 }
