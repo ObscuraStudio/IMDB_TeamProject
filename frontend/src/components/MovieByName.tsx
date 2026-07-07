@@ -41,7 +41,7 @@ export default function MovieByName() {
             <div>
                 {isMovieValid ?
                     <MovieDetails {...movie}/> :
-                    <p>Movie not found</p>
+                    <p>Movie with given name not found</p>
                 }
             </div>
         </>

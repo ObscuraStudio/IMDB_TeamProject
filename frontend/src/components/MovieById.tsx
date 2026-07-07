@@ -41,7 +41,7 @@ export default function MovieById() {
             <div>
                 {isMovieValid ?
                     <MovieDetails {...movie}/> :
-                    <p>Movie not found</p>
+                    <p>Movie with given Id not found</p>
                 }
             </div>
         </>
