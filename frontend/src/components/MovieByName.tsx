@@ -19,14 +19,14 @@ export default function MovieByName() {
     return (
         <>
             <form onSubmit={submitMovieName}>
-                <label> Movie name </label>
+                <label htmlFor={"movie-name"}> Movie name </label>
                 <br/>
                 <input onChange=
                            {(e) =>
                                setMovieName(e.target.value)
                            }
                        type="text"
-                       id="Movie name"
+                       id="movie-name"
                        name="Movie name"
                        required
                        minLength={MIN_LENGTH_MOVIE_TITLE}

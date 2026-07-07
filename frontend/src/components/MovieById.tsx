@@ -19,14 +19,14 @@ export default function MovieById() {
     return (
         <>
             <form onSubmit={submitMovieId}>
-                <label> Movie name </label>
+                <label htmlFor="movie-id"> Movie name </label>
                 <br/>
                 <input onChange=
                            {(e) =>
                                setMovieId(e.target.value)
                            }
                        type="text"
-                       id="Movie Id"
+                       id="movie-id"
                        name="Movie Id"
                        required
                        minLength={MIN_LENGTH_MOVIE_ID}
