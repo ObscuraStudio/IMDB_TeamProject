@@ -1,23 +1,30 @@
-import {useState} from "react";
-import {baseURI, MIN_LENGTH_MOVIE_ID, type OmdbMovieResponse} from "../types/Movie.ts";
-import axios from "axios";
+import {type JSX, useState} from "react";
+import {baseURI, MIN_LENGTH_MOVIE_ID} from "../types/Movie.ts";
 import MovieDetails from "./MovieDetails.tsx";
+import {useMovieFetch} from "../hooks/useMovieFetch.ts";
 
 export default function MovieById() {
+
     const placeholder: string = "Enter Imdb Id";
     const [movieId, setMovieId] = useState<string>(placeholder);
-    const [movie, setMovie] = useState<OmdbMovieResponse>({Title: "", Year: ""});
-    const [isMovieValid, setIsMovieValid] = useState<boolean>(true);
+
+    const {isSubmitButtonClicked, isMovieValid, movie, submit} = useMovieFetch();
 
     function submitMovieId(event: React.SubmitEvent) {
         event.preventDefault();
         const queryURI: string = baseURI + "/" + movieId;
-        axios.get(queryURI)
-            .then((response) => {
-                setMovie(response.data);
-                setIsMovieValid(true);
-            })
-            .catch(() => setIsMovieValid(false));
+        submit(queryURI);
+    }
+
+    const renderResultContent = ():JSX.Element => {
+        return (
+            <div>
+                {isMovieValid ?
+                    <MovieDetails {...movie}/> :
+                    <p>Movie with given Id not found</p>
+                }
+            </div>
+        )
     }
 
     return (
@@ -38,12 +45,7 @@ export default function MovieById() {
                 <br/>
                 <button type={"submit"}> Submit</button>
             </form>
-            <div>
-                {isMovieValid ?
-                    <MovieDetails {...movie}/> :
-                    <p>Movie with given Id not found</p>
-                }
-            </div>
+            {isSubmitButtonClicked && renderResultContent()}
         </>
     )
 }
