@@ -1,6 +1,5 @@
 import {useState} from "react";
 import {useMovieFetch} from "../hooks/useMovieFetch.ts"
-import {MIN_LENGTH_MOVIE_TITLE} from "../types/Movie.ts";
 import NameIdQueryResult from "./NameIdQueryResult.tsx";
 
 export default function MovieByName() {
@@ -30,7 +29,6 @@ export default function MovieByName() {
                        id="movie-name"
                        name="Movie name"
                        required
-                       minLength={MIN_LENGTH_MOVIE_TITLE}
                        placeholder={placeholder}/>
                 <br/>
                 <button type={"submit"}> Submit</button>
