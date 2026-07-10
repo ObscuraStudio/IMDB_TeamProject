@@ -2,6 +2,8 @@ package org.example.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.With;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
@@ -25,6 +27,7 @@ public record OmdbMovieResponse(
         @JsonProperty("Country") String country,
         @JsonProperty("Awards") String awards,
         @JsonProperty("Poster") String poster,
+        @Field("Ratings")
         @JsonProperty("Ratings") List<Rating> ratings,
         @JsonProperty("Metascore") String metascore,
         @JsonProperty("imdbRating") String imdbRating,
@@ -34,7 +37,9 @@ public record OmdbMovieResponse(
         @JsonProperty("BoxOffice") String boxOffice,
 
         // OMDb status fields for later? (Exceptions?)
+        @With
         @JsonProperty("Response") String response,
+        @With
         @JsonProperty("Error") String error
 ) {
 }

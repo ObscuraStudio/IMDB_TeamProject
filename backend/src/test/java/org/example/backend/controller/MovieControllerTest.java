@@ -6,6 +6,9 @@ import org.example.backend.exception.MovieNotFoundException;
 import org.example.backend.service.OmdbService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientAutoConfiguration;
+import org.springframework.boot.security.oauth2.client.autoconfigure.servlet.OAuth2ClientWebSecurityAutoConfiguration;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,7 +26,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * PascalCase keys via @JsonProperty), and that a MovieNotFoundException is
  * mapped to HTTP 404 by the @RestControllerAdvice.
  */
-@WebMvcTest(MovieController.class)
+@WebMvcTest(controllers = MovieController.class,
+        excludeAutoConfiguration = {
+                OAuth2ClientAutoConfiguration.class,
+                OAuth2ClientWebSecurityAutoConfiguration.class
+        })
+@AutoConfigureMockMvc(addFilters = false) // skip the security filter chain; this slice tests routing, not auth
 class MovieControllerTest {
 
     @Autowired
@@ -38,7 +46,7 @@ class MovieControllerTest {
     void getMovieById_whenFound_returnsMovie() throws Exception {
         when(omdbService.getMovieById("tt1375666")).thenReturn(sampleMovie());
 
-        mockMvc.perform(get("/api/movies/tt1375666"))
+        mockMvc.perform(get("/api/login/movies/tt1375666"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.Title").value("Inception"))
                 .andExpect(jsonPath("$.imdbID").value("tt1375666"))
@@ -51,7 +59,7 @@ class MovieControllerTest {
         when(omdbService.getMovieById("tt0000000"))
                 .thenThrow(new MovieNotFoundException("Movie not found!"));
 
-        mockMvc.perform(get("/api/movies/tt0000000"))
+        mockMvc.perform(get("/api/login/movies/tt0000000"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value(
                         org.hamcrest.Matchers.containsString("Movie not found")))
@@ -64,7 +72,7 @@ class MovieControllerTest {
     void getMovieByName_whenFound_returnsMovie() throws Exception {
         when(omdbService.getMovieByName("Inception")).thenReturn(sampleMovie());
 
-        mockMvc.perform(get("/api/movies/title/Inception"))
+        mockMvc.perform(get("/api/login/movies/title/Inception"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.Title").value("Inception"))
                 .andExpect(jsonPath("$.Year").value("2010"));
@@ -76,7 +84,7 @@ class MovieControllerTest {
     void getMoviePlotByName_whenFound_returnsMovieWithPlot() throws Exception {
         when(omdbService.getMoviePlotByName("Inception")).thenReturn(sampleMovie());
 
-        mockMvc.perform(get("/api/movies/plot/Inception"))
+        mockMvc.perform(get("/api/login/movies/plot/Inception"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.Plot").value("A thief who steals corporate secrets."));
     }
