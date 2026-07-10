@@ -1,5 +1,6 @@
 import type {OmdbMovieResponse} from "../types/Movie.ts";
 import "../css/MovieTable.css"
+import AddFavouriteButton from "./AddFavouriteButton.tsx";
 
 export default function Plotdetails(movie: Readonly<OmdbMovieResponse>) {
     return (
@@ -22,6 +23,7 @@ export default function Plotdetails(movie: Readonly<OmdbMovieResponse>) {
                         </table>
                     </section>
                 </main>
+                <AddFavouriteButton movie={movie}/>
             </article>
         </div>
     )

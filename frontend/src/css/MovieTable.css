@@ -1,21 +1,29 @@
 .interface-table {
     border-collapse: collapse;
     width: 100%;
+    background: var(--md-surface, #1a1d27);
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .interface-row {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--md-border, #2e3342);
 }
 
 .row-header {
-    padding: 8px;
-    font-weight: bold;
+    padding: 12px 14px;
+    font-weight: 600;
     width: 30%;
-    background-color: #f5f5f5;
+    background-color: var(--md-surface-2, #232735);
+    color: var(--md-accent, #f5c518);
+    text-align: left;
+    vertical-align: top;
 }
 
 .interface-value {
-    padding: 8px;
+    padding: 12px 14px;
+    color: var(--md-text, #e8e9ee);
+    text-align: left;
 }
 
 h1 {

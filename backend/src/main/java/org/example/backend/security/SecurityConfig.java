@@ -20,6 +20,11 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
+                        // login-status check must be reachable while logged out
+                        .requestMatchers("/api/auth/me").permitAll()
+                        // all data endpoints require an authenticated session
+                        .requestMatchers("/api/**", "/iri/**").authenticated()
+                        // everything else (SPA static files, /oauth2/**, /login/**) is open
                         .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2

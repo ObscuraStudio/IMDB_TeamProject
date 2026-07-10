@@ -5,7 +5,7 @@ import NameIdQueryResult from "./NameIdQueryResult.tsx";
 
 export default function MovieById() {
 
-    const placeholder: string = "Enter Imdb Id";
+    const placeholder: string = "Enter IMDB ID...";
     const [movieId, setMovieId] = useState<string>(placeholder);
 
     const {isSubmitButtonClicked, isMovieValid, movie, submit} = useMovieFetch();
@@ -13,14 +13,14 @@ export default function MovieById() {
     function submitMovieId(event: React.SubmitEvent) {
         event.preventDefault();
         const queryURI: string = "/";
-        const pathSegment:string = movieId;
+        const pathSegment: string = movieId;
         submit(queryURI, pathSegment);
     }
 
     return (
         <>
             <form onSubmit={submitMovieId}>
-                <label htmlFor="movie-id"> Movie name </label>
+                <label htmlFor="movie-id"> Movie Searchbar </label>
                 <br/>
                 <input onChange=
                            {(e) =>

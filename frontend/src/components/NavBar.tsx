@@ -1,11 +1,15 @@
-import {Link} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
 export default function NavBar() {
+    const linkClass = ({isActive}: {isActive: boolean}) =>
+        isActive ? "nav-link active" : "nav-link";
+
     return (
-        <>
-            <Link to={"/"}>Find Movie By Name</Link>
-            <Link to={"/findById"}>Find Movie By Id</Link>
-            <Link to={"/findPlotByName"}>Find Movie Plot By Name</Link>
-        </>
+        <nav className="nav">
+            <NavLink to={"/"} className={linkClass} end>Find by Name</NavLink>
+            <NavLink to={"/findById"} className={linkClass}>Find by Id</NavLink>
+            <NavLink to={"/findPlotByName"} className={linkClass}>Find Plot by Name</NavLink>
+            <NavLink to={"/favourites"} className={linkClass}>My Favourites</NavLink>
+        </nav>
     )
 }

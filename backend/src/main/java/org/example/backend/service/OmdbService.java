@@ -122,6 +122,28 @@ public class OmdbService {
         UserData userWithNewFavorites = existingUser.withOmdbMovieResponseList(updatedList);
         return userDataRepository.save(userWithNewFavorites);
     }
+
+    // return the current user's favourites (load-or-create so a fresh user gets an empty list)
+    public List<OmdbMovieResponse> getFavorites(String githubUsername) {
+        UserData user = showUserData(githubUsername);
+        return user.omdbMovieResponseList() != null ? user.omdbMovieResponseList() : new ArrayList<>();
+    }
+
+    // remove a favourite by its imdbId and persist the shortened list
+    public UserData removeMovieFromFavorites(String githubUsername, String imdbId) {
+        UserData existingUser = userDataRepository.findById(githubUsername)
+                .orElseThrow(() -> new RuntimeException("User not found, though logged in!"));
+
+        List<OmdbMovieResponse> currentList = existingUser.omdbMovieResponseList() != null
+                ? existingUser.omdbMovieResponseList()
+                : List.of();
+
+        List<OmdbMovieResponse> updatedList = currentList.stream()
+                .filter(movie -> movie.imdbId() == null || !movie.imdbId().equals(imdbId))
+                .toList();
+
+        return userDataRepository.save(existingUser.withOmdbMovieResponseList(updatedList));
+    }
     // END --- Service MEthods ---
 
     // --- CRUD Repository ---
