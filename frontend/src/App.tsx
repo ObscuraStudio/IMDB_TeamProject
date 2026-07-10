@@ -4,24 +4,12 @@ import MovieByName from "./components/MovieByName.tsx";
 import NavBar from "./components/NavBar.tsx";
 import MovieById from "./components/MovieById.tsx";
 import MoviePlotByName from "./components/MoviePlotByName.tsx";
-import {oAuth2_segment_github, startURL_backend_local, startURL_frontend_local} from "./types/Movie.ts";
-import axios from "axios";
 import {useEffect} from "react";
+import {useAuth} from "./hooks/useAuth.ts";
 
 function App() {
 
-    function login() {
-        const host:string =
-            window.location.host === startURL_frontend_local ?
-                startURL_backend_local :
-                window.location.origin;
-        window.open(host + oAuth2_segment_github, "_self")
-    }
-
-    const loadUser = () => {
-        axios.get("/api/auth")
-            .then(response => console.log(response.data));
-    }
+    const {login, loadUser, user} = useAuth();
 
     useEffect(() => {
         loadUser();
@@ -31,6 +19,7 @@ function App() {
         <>
             <NavBar></NavBar>
             <button onClick={login}>Login via GitHub</button>
+            <button>Create new user</button>
             <Routes>
                 <Route path={"/"} element={<MovieByName />}></Route>
                 <Route path={"/findById"} element={<MovieById />}></Route>

@@ -34,6 +34,3 @@ export const MIN_LENGTH_MOVIE_TITLE: number = 5;
 export const MIN_LENGTH_MOVIE_ID: number = 7;
 export const SAFE_PATH_SEGMENT:RegExp = /^[a-zA-Z0-9\s'’:,.\-()]+$/;
 
-export const startURL_frontend_local:string = "localhost:5173";
-export const startURL_backend_local:string = "http://localhost:8080";
-export const oAuth2_segment_github:string = "/oauth2/authorization/github";
