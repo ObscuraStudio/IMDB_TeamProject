@@ -18,13 +18,25 @@ export function useAuth() {
         window.open(backendHost() + oAuth2_segment_github, "_self");
     }
 
+    function readCookie(name: string): string {
+        const match = document.cookie.match(new RegExp("(^|;\\s*)" + name + "=([^;]*)"));
+        return match ? decodeURIComponent(match[2]) : "";
+    }
+
     function logout() {
-        // Spring Security's default logout is a POST /logout. A top-level form
-        // submit invalidates the session and follows the redirect back to the app
-        // (no CSRF token needed since CSRF is disabled in SecurityConfig).
+        // Spring Security's logout is a POST /logout. Since CSRF is enabled, the
+        // form carries the token from the XSRF-TOKEN cookie in a hidden _csrf field.
+        // The top-level submit invalidates the session and follows the redirect home.
         const form = document.createElement("form");
         form.method = "POST";
         form.action = backendHost() + "/logout";
+
+        const csrf = document.createElement("input");
+        csrf.type = "hidden";
+        csrf.name = "_csrf";
+        csrf.value = readCookie("XSRF-TOKEN");
+        form.appendChild(csrf);
+
         document.body.appendChild(form);
         form.submit();
     }

@@ -16,5 +16,7 @@ public record Rating(
 ) {
     @JsonCreator
     public Rating {
+        // Compact canonical constructor kept only to attach @JsonCreator, which
+        // tells Jackson how to deserialize this record. No validation is needed.
     }
 }
