@@ -1,7 +1,6 @@
 package org.example.backend.service;
 
 import org.example.backend.dto.OmdbMovieResponse;
-import org.example.backend.entities.OMDBItem;
 import org.example.backend.entities.UserData;
 import org.example.backend.exception.MovieNotFoundException;
 import org.example.backend.repository.UserDataRepository;
@@ -10,20 +9,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class OmdbService {
 
     private final UserDataRepository userDataRepository;
 
-    private final IdService idService;
-
     private final RestClient omdbRestClient;
 
-    public OmdbService(RestClient omdbRestClient, UserDataRepository userDataRepository, IdService idService) {
+    public OmdbService(RestClient omdbRestClient, UserDataRepository userDataRepository) {
         this.omdbRestClient = omdbRestClient;
         this.userDataRepository = userDataRepository;
-        this.idService = idService;
     }
 
     // get a movie by its IMDb id, e.g. tt1375666
@@ -79,36 +76,77 @@ public class OmdbService {
     }
 
     // --- Service MEthods ---
-    public boolean createUser(String userName){
-        if( getUserData(userName) == null ){
-            String newID = this.idService.generateNewId();
+    // create UserData if none available for userName
+    public UserData createUser(String userName){
+        if( userDataRepository.findById(userName).orElse(null) == null ){
             UserData newUD = UserData.builder()
-                    .id(newID)
                     .userName(userName)
-                    .omdbItemList(new ArrayList<OMDBItem>())
+                    .omdbMovieResponseList(new ArrayList<OmdbMovieResponse>())
                     .build();
-            this.saveUserData(newUD);
-            return true;
+            return this.saveUserData(newUD);
         }
         else{
-            return false;
+            return null;
         }
     }
 
+    // show UserData for username or create if not available
     public UserData showUserData(String username) {
-        return getUserData(username);
+        UserData uD = userDataRepository.findById(username).orElse(null);
+        return uD != null ? uD : createUser(username);
     }
-    // usw. ...
+
+    //  add new FavouriteMovie to UserData
+    public UserData addMovieToFavorites(String githubUsername, OmdbMovieResponse newMovie) {
+        UserData existingUser = userDataRepository.findById(githubUsername)
+                .orElseThrow(() -> new RuntimeException("User not found, though logged in!"));
+
+        // returns copy of Record without status fields
+        OmdbMovieResponse cleanedMovie = newMovie
+                .withResponse(null)
+                .withError(null);
+
+        List<OmdbMovieResponse> currentList = existingUser.omdbMovieResponseList() != null
+                ? existingUser.omdbMovieResponseList()
+                : List.of();
+
+        boolean alreadyExists = currentList.stream()
+                .anyMatch(movie -> movie.imdbId() != null && movie.imdbId().equals(cleanedMovie.imdbId()));
+        if (alreadyExists) {
+            return existingUser;
+        }
+
+        List<OmdbMovieResponse> updatedList = new ArrayList<>(currentList);
+        updatedList.add(cleanedMovie);
+
+        UserData userWithNewFavorites = existingUser.withOmdbMovieResponseList(updatedList);
+        return userDataRepository.save(userWithNewFavorites);
+    }
+
+    // return the current user's favourites (load-or-create so a fresh user gets an empty list)
+    public List<OmdbMovieResponse> getFavorites(String githubUsername) {
+        UserData user = showUserData(githubUsername);
+        return user.omdbMovieResponseList() != null ? user.omdbMovieResponseList() : new ArrayList<>();
+    }
+
+    // remove a favourite by its imdbId and persist the shortened list
+    public UserData removeMovieFromFavorites(String githubUsername, String imdbId) {
+        UserData existingUser = userDataRepository.findById(githubUsername)
+                .orElseThrow(() -> new RuntimeException("User not found, though logged in!"));
+
+        List<OmdbMovieResponse> currentList = existingUser.omdbMovieResponseList() != null
+                ? existingUser.omdbMovieResponseList()
+                : List.of();
+
+        List<OmdbMovieResponse> updatedList = currentList.stream()
+                .filter(movie -> movie.imdbId() == null || !movie.imdbId().equals(imdbId))
+                .toList();
+
+        return userDataRepository.save(existingUser.withOmdbMovieResponseList(updatedList));
+    }
     // END --- Service MEthods ---
 
     // --- CRUD Repository ---
-    public UserData getUserData(String username) {
-        if(userDataRepository.existsByUserName(username)){
-            return userDataRepository.getUserDataByUserName(username);
-        }
-        return null;
-    }
-
     public UserData saveUserData(UserData userData) {
         if(userDataRepository.existsByUserName(userData.userName())){
             return null;
@@ -117,18 +155,5 @@ public class OmdbService {
             return userDataRepository.save(userData);
         }
     }
-
-    public UserData updateUserData(UserData userData) {
-        UserData uD = userDataRepository.getUserDataByUserName(userData.userName());
-        UserData updatedUD = uD.withOmdbItemList(userData.omdbItemList());
-        return userDataRepository.save(updatedUD);
-    }
-
-    public void deleteUserData(UserData userData) {
-        if(userDataRepository.existsByUserName(userData.userName())){
-            userDataRepository.delete(userData);
-        }
-    }
-
     // END --- CRUD Repository ---
 }
