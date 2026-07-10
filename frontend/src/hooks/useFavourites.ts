@@ -3,6 +3,7 @@ import {useState} from "react";
 import type {OmdbMovieResponse} from "../types/Movie.ts";
 
 const FAVOURITES_URI = "/api/favourites";
+const secureUrl = new URL(FAVOURITES_URI, window.location.origin);
 
 export function useFavourites() {
     const [favourites, setFavourites] = useState<OmdbMovieResponse[]>([]);
@@ -15,11 +16,11 @@ export function useFavourites() {
 
     // Each mutation returns the updated list from the backend, so state stays in sync.
     const addFavourite = (movie: OmdbMovieResponse) =>
-        axios.post<OmdbMovieResponse[]>(FAVOURITES_URI, movie)
+        axios.post<OmdbMovieResponse[]>(secureUrl.href, movie)
             .then(response => setFavourites(response.data));
 
     const removeFavourite = (imdbId: string) =>
-        axios.delete<OmdbMovieResponse[]>(`${FAVOURITES_URI}/${imdbId}`)
+        axios.delete<OmdbMovieResponse[]>(`${secureUrl.href}/${imdbId}`)
             .then(response => setFavourites(response.data));
 
     return {favourites, loadFavourites, addFavourite, removeFavourite};
